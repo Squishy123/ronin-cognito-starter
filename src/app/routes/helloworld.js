@@ -2,8 +2,8 @@
 const Helloworld = {
     method: "GET",
     path: "/",
-    handler: [(req, res) => {
-        req.payload = { message: 'Hello World!', data: req.params};
+    handler: [function (req, res) {
+        req.payload = { message: 'Hello World!', data: req.params, binds: this.binds};
     }, (req, res) => {
         Object.assign(req.payload, {test: "MORE!"});
     }]

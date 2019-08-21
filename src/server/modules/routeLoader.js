@@ -5,8 +5,8 @@ import combineParsed from '../../app/middlewares/general/combineParsed';
 import sendPayload from '../../app/middlewares/general/sendPayload';
 
 function packageMiddle(middle) {
-    return (req, res, next) => {
-        middle(req, res);
+    return async function (req, res, next) {
+        await middle(req, res);
         if(next) 
             next();
     };
@@ -73,10 +73,10 @@ export default class RouteLoader {
             //check if arr of middleware
             if (Array.isArray(routeObject.handler)) {
                 //add parser
-                routeObject.handler.unshift(packageMiddle(combineParsed));
+                routeObject.handler.unshift(combineParsed);
 
                 //add payload sender
-                routeObject.handler.push(packageMiddle(sendPayload));
+                routeObject.handler.push(sendPayload);
 
                 for (let i = 0; i < routeObject.handler.length; i++) {
                     routeObject.handler[i] = packageMiddle(routeObject.handler[i].bind(this));

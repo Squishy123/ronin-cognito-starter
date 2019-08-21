@@ -3,6 +3,10 @@ const cors = require('cors');
 const path = require('path');
 const bodyParser = require('body-parser');
 
+const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+global.fetch = require('node-fetch');
+global.navigator = () => null;
+
 import RouteLoader from './modules/routeLoader';
 import connectMongo from './modules/connectMongo';
 
@@ -24,10 +28,11 @@ server.use(bodyParser.json());
 
 //load cognito auth information
 const cognitoPoolData = {
-    userPoolId: process.env.COGNITO_USER_POOL_ID,
-    clientId: process.env.COGNITO_CLIENT_ID
+    UserPoolId: process.env.COGNITO_USER_POOL_ID,
+    ClientId: process.env.COGNITO_CLIENT_ID
 };
 
+//init cognito userpool
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(cognitoPoolData);
 
 const cognitoData = {

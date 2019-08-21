@@ -37,6 +37,11 @@
       "name": "auth/loginUser",
       "path": "src/app/middlewares/auth/loginUser.js",
       "createdAt": "2019-08-21T17:49:45.193Z"
+    },
+    {
+      "name": "auth/validateUserLogin",
+      "path": "src/app/middlewares/auth/validateUserLogin.js",
+      "createdAt": "2019-08-21T18:40:19.372Z"
     }
   ],
   "routes": [
@@ -44,6 +49,11 @@
       "name": "helloworld",
       "path": "src/app/routes/helloworld.js",
       "createdAt": "2019-08-16T20:13:01.703Z"
+    },
+    {
+      "name": "users/loginUser",
+      "path": "src/app/routes/users/loginUser.js",
+      "createdAt": "2019-08-21T19:16:21.848Z"
     }
   ]
 }
