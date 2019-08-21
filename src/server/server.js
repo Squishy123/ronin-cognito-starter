@@ -22,6 +22,20 @@ server.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 server.use(bodyParser.json());
 
+//load cognito auth information
+const cognitoPoolData = {
+    userPoolId: process.env.COGNITO_USER_POOL_ID,
+    clientId: process.env.COGNITO_CLIENT_ID
+};
+
+const userPool = new AmazonCognitoIdentity.CognitoUserPool(cognitoPoolData);
+
+const cognitoData = {
+    userPool: userPool,
+    poolRegion: `ca-central-1`,
+    poolData: cognitoPoolData
+};
+
 (async function () {
     try {
         //connect to mongodb
@@ -33,6 +47,7 @@ server.use(bodyParser.json());
             verbose: true,
             strict: true,
             binds: {
+                cognitoData,
             },
         });
         await routeLoader.loadDir();

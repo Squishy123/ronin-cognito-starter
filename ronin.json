@@ -32,6 +32,11 @@
       "name": "general/sendPayload",
       "path": "src/app/middlewares/general/sendPayload.js",
       "createdAt": "2019-08-16T19:53:19.853Z"
+    },
+    {
+      "name": "auth/loginUser",
+      "path": "src/app/middlewares/auth/loginUser.js",
+      "createdAt": "2019-08-21T17:49:45.193Z"
     }
   ],
   "routes": [
