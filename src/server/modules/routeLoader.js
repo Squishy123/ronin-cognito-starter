@@ -1,17 +1,19 @@
-const path = require('path');
-const glob = require('glob');
+const path = require("path");
+const glob = require("glob");
 
-import combineParsed from '../../app/middlewares/general/combineParsed';
-import sendPayload from '../../app/middlewares/general/sendPayload';
+import combineParsed from "../../app/middlewares/general/combineParsed";
+import sendPayload from "../../app/middlewares/general/sendPayload";
 
 function packageMiddle(middle) {
     return async function (req, res, next) {
         try {
-            await middle(req, res);
-            if(next) 
-                next();
-        } catch(err) {
-            res.status(400).send(err);
+            let fn = await middle(req, res);
+            if (fn instanceof Error)
+                throw fn;
+
+            if (next) next();
+        } catch (err) {
+            return res.send({message: err.message});
         }
     };
 }
@@ -44,9 +46,9 @@ export default class RouteLoader {
         this.opts = {
             dir: opts.dir
                 ? opts.dir
-                : path.join(__dirname, '../../routes/HTTPRoutes'),
+                : path.join(__dirname, "../../routes/HTTPRoutes"),
             verbose: opts.verbose ? opts.verbose : true,
-            strict: opts.strict ? opts.strict : false,
+            strict: opts.strict ? opts.strict : false
         };
 
         if (opts.binds) this.binds = opts.binds;
@@ -61,15 +63,11 @@ export default class RouteLoader {
     loadObject(routeObject) {
         //check if route is already taken
         let exist = this.loadedRoutes.find(function (r) {
-            return (
-                r.path === routeObject.path && r.method === routeObject.method
-            );
+            return r.path === routeObject.path && r.method === routeObject.method;
         });
         if (exist) {
             if (this.opts.verbose)
-               throw(
-                    new Error(`HTTPRouteLoader Error: Route already taken`)
-                );
+                throw new Error(`HTTPRouteLoader Error: Route already taken`);
             return;
         }
 
@@ -83,7 +81,9 @@ export default class RouteLoader {
                 routeObject.handler.push(sendPayload);
 
                 for (let i = 0; i < routeObject.handler.length; i++) {
-                    routeObject.handler[i] = packageMiddle(routeObject.handler[i].bind(this));
+                    routeObject.handler[i] = packageMiddle(
+                        routeObject.handler[i].bind(this)
+                    );
                 }
             } else {
                 routeObject.handler = [
@@ -93,23 +93,19 @@ export default class RouteLoader {
                 ];
             }
             //http method
-            if (routeObject.method === 'GET')
+            if (routeObject.method === "GET")
                 this.server.get(routeObject.path, routeObject.handler);
-            else if (routeObject.method === 'HEAD')
+            else if (routeObject.method === "HEAD")
                 this.server.head(routeObject.path, routeObject.handler);
-            else if (routeObject.method === 'POST')
+            else if (routeObject.method === "POST")
                 this.server.post(routeObject.path, routeObject.handler);
-            else if (routeObject.method === 'PUT')
+            else if (routeObject.method === "PUT")
                 this.server.put(routeObject.path, routeObject.handler);
-            else if (routeObject.method === 'DELETE')
+            else if (routeObject.method === "DELETE")
                 this.server.delete(routeObject.path, routeObject.handler);
             else {
-               throw(
-                    new Error(
-                        `HTTPRouteLoader Error: Route method ${
-                        routeObject.method
-                        } is invalid`
-                    )
+                throw new Error(
+                    `HTTPRouteLoader Error: Route method ${routeObject.method} is invalid`
                 );
                 return;
             }
@@ -120,19 +116,13 @@ export default class RouteLoader {
             //verbose
             if (this.opts.verbose) {
                 console.log(
-                    `Success: Added new HTTP route ${routeObject.method} ${
-                    routeObject.path
-                    }`
+                    `Success: Added new HTTP route ${routeObject.method} ${routeObject.path}`
                 );
             }
         } else {
             //verbose
             if (this.opts.verbose) {
-                throw(
-                    `Error: No Handler found for ${routeObject.method} ${
-                    routeObject.path
-                    }`
-                );
+                throw `Error: No Handler found for ${routeObject.method} ${routeObject.path}`;
             }
         }
 
@@ -161,14 +151,12 @@ export default class RouteLoader {
     loadDir(dir) {
         //check if dir exists
         if (!dir && !this.opts.dir) {
-           throw(
-                new Error(`HTTPRouteLoader Error: No directory specified`)
-            );
+            throw new Error(`HTTPRouteLoader Error: No directory specified`);
             return;
         }
 
         //load objects
-        glob.sync(dir ? dir + '/**/*.js' : this.opts.dir + '/**/*.js').forEach(
+        glob.sync(dir ? dir + "/**/*.js" : this.opts.dir + "/**/*.js").forEach(
             function (file) {
                 let routeObject = require(file).default;
                 //strict check

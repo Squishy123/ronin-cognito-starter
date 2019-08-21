@@ -1,21 +1,19 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const bodyParser = require('body-parser');
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+const bodyParser = require("body-parser");
 
-const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
-global.fetch = require('node-fetch');
+const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
+global.fetch = require("node-fetch");
 global.navigator = () => null;
 
-import RouteLoader from './modules/routeLoader';
-import connectMongo from './modules/connectMongo';
+import RouteLoader from "./modules/routeLoader";
+import connectMongo from "./modules/connectMongo";
 
 //load env vars
-if (process.env.NODE_ENV == 'development')
-    require('custom-env').env('dev');
+if (process.env.NODE_ENV == "development") require("custom-env").env("dev");
 
-if (process.env.NODE_ENV == 'production')
-    require('custom-env').env('prod');
+if (process.env.NODE_ENV == "production") require("custom-env").env("prod");
 
 let server = express();
 
@@ -28,40 +26,39 @@ server.use(bodyParser.json());
 
 //load cognito auth information
 const cognitoPoolData = {
-    UserPoolId: process.env.COGNITO_USER_POOL_ID,
-    ClientId: process.env.COGNITO_CLIENT_ID
+  UserPoolId: process.env.COGNITO_USER_POOL_ID,
+  ClientId: process.env.COGNITO_CLIENT_ID
 };
 
 //init cognito userpool
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(cognitoPoolData);
 
 const cognitoData = {
-    userPool: userPool,
-    poolRegion: `ca-central-1`,
-    poolData: cognitoPoolData
+  userPool: userPool,
+  poolRegion: `ca-central-1`,
+  poolData: cognitoPoolData
 };
 
-(async function () {
-    try {
-        //connect to mongodb
-        await connectMongo();
+(async function() {
+  try {
+    //connect to mongodb
+    await connectMongo();
 
-        //load all routes
-        let routeLoader = new RouteLoader(server, {
-            dir: path.join(__dirname, '../app/routes'),
-            verbose: true,
-            strict: true,
-            binds: {
-                cognitoData,
-            },
-        });
-        await routeLoader.loadDir();
+    //load all routes
+    let routeLoader = new RouteLoader(server, {
+      dir: path.join(__dirname, "../app/routes"),
+      verbose: true,
+      strict: true,
+      binds: {
+        cognitoData
+      }
+    });
+    await routeLoader.loadDir();
 
-        server.listen(3000, function () {
-            console.log(`${server.name} listening at http://localhost:3000`);
-        });
-    } catch (err) {
-        console.error(err);
-    }
-
+    server.listen(3000, function() {
+      console.log(`${server.name} listening at http://localhost:3000`);
+    });
+  } catch (err) {
+    console.error(err);
+  }
 })();

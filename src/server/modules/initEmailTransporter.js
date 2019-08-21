@@ -1,5 +1,5 @@
-function initEmailTransporter () {
-    //Module
+function initEmailTransporter() {
+  //Module
 }
 
 export default initEmailTransporter;
