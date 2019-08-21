@@ -6,9 +6,13 @@ import sendPayload from '../../app/middlewares/general/sendPayload';
 
 function packageMiddle(middle) {
     return async function (req, res, next) {
-        await middle(req, res);
-        if(next) 
-            next();
+        try {
+            await middle(req, res);
+            if(next) 
+                next();
+        } catch(err) {
+            res.status(400).send(err);
+        }
     };
 }
 
