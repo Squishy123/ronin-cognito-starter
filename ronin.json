@@ -20,6 +20,11 @@
       "name": "initEmailTransporter",
       "path": "src/server/modules/initEmailTransporter.js",
       "createdAt": "2019-08-20T17:12:11.579Z"
+    },
+    {
+      "name": "getJwks",
+      "path": "src/server/modules/getJwks.js",
+      "createdAt": "2019-08-22T18:15:47.680Z"
     }
   ],
   "middlewares": [
@@ -42,6 +47,11 @@
       "name": "auth/validateUserLogin",
       "path": "src/app/middlewares/auth/validateUserLogin.js",
       "createdAt": "2019-08-21T18:40:19.372Z"
+    },
+    {
+      "name": "auth/verifyAccessToken",
+      "path": "src/app/middlewares/auth/verifyAccessToken.js",
+      "createdAt": "2019-08-22T17:46:19.112Z"
     }
   ],
   "routes": [

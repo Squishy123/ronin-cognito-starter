@@ -9,6 +9,7 @@ global.navigator = () => null;
 
 import RouteLoader from "./modules/routeLoader";
 import connectMongo from "./modules/connectMongo";
+import getJwks from "./modules/getJwks";
 
 //load env vars
 if (process.env.NODE_ENV == "development") require("custom-env").env("dev");
@@ -43,6 +44,10 @@ const cognitoData = {
   try {
     //connect to mongodb
     await connectMongo();
+
+    //get jwks
+    let jwks = await getJwks(cognitoData);
+    Object.assign(cognitoData, {keys: jwks.keys});
 
     //load all routes
     let routeLoader = new RouteLoader(server, {
