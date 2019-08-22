@@ -5,22 +5,17 @@
  * email - required
  * password -required
  */
-function validateUserRegistration (req, res) {
-    let missing = "";
+function validateUserRegistration(req, res) {
     let queries = ["username", "name", "email", "password"];
 
-    queries.forEach((q, i) => {
-        if(!req.params[q])
-            missing+=req.params[q];
-        
-        if(i < queries.length-1)
-            missing+=", ";
-
+    let missing = queries.filter((q) => {
+        if (!req.params[q])
+            return q;
     });
 
-    if(missing.length)
+    if (missing.length)
         return new Error(`Error: Missing required parameters: ${missing}`);
-        
+
 }
 
 export default validateUserRegistration;
