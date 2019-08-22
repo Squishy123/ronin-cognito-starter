@@ -1,6 +1,6 @@
 const AmazonCognitoIdentity = require("amazon-cognito-identity-js");
 
-async function LoginUser(req, res, next) {
+async function loginUser(req, res, next) {
   let authDetails = new AmazonCognitoIdentity.AuthenticationDetails({
     Username: req.params.username || req.params.email,
     Password: req.params.password
@@ -27,4 +27,4 @@ async function LoginUser(req, res, next) {
   req.message = "Success: Successfully Logged in User";
 }
 
-export default LoginUser;
+export default loginUser;

@@ -1,15 +1,31 @@
 const jwt = require('jsonwebtoken');
-const fetch = require('node-fetch');
 
-function VerifyAccessToken (req, res) {
-    let poolRegion = this.binds.cognitoData.poolRegion;
-    let userPoolId = this.binds.cognitoData.poolData.UserPoolId;
+async function verifyAccessToken (req, res) {
+    let decoded = jwt.decode(req.params.accessToken, {complete: true});
+    let verified;
 
-    await fetch(`https://cognito-idp.${poolRegion}.amazonaws.com/${userPoolId}/.well-known/jwks.json`,
-    {
-        method: "GET",
-        
-    })
+    console.log(decoded.header);
+
+    //prelim check if accessToken kid matches any keys
+    for(let i = 0; i < this.binds.cognitoData.keys.length; i++) {
+        if(decoded.header.kid == this.binds.cognitoData.keys[i].kid) {
+            verified = await new Promise((res, rej) => {
+                jwt.verify(req.params.accessToken, this.binds.cognitoData.keys[i].pem, {
+                    algorithms: [this.binds.cognitoData.keys[i].alg]
+                }, (err, decodedToken) => {
+                    if(err) 
+                        rej(err);
+                    res(decodedToken);
+                })
+            });
+        }
+    }
+
+    if(!verified)
+        throw new Error("Error: AccessToken is invalid");
+
+    //add verified access token field
+    Object.assign(req.scope.verified, {accessToken: true});
 }
 
-export default VerifyAccessToken;
+export default verifyAccessToken;

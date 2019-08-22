@@ -52,6 +52,11 @@
       "name": "auth/verifyAccessToken",
       "path": "src/app/middlewares/auth/verifyAccessToken.js",
       "createdAt": "2019-08-22T17:46:19.112Z"
+    },
+    {
+      "name": "auth/validateAccessToken",
+      "path": "src/app/middlewares/auth/validateAccessToken.js",
+      "createdAt": "2019-08-22T18:33:03.056Z"
     }
   ],
   "routes": [
@@ -64,6 +69,11 @@
       "name": "users/loginUser",
       "path": "src/app/routes/users/loginUser.js",
       "createdAt": "2019-08-21T19:16:21.848Z"
+    },
+    {
+      "name": "users/verifyAccessToken",
+      "path": "src/app/routes/users/verifyAccessToken.js",
+      "createdAt": "2019-08-22T19:20:08.010Z"
     }
   ]
 }
