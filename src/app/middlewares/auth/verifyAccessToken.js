@@ -1,10 +1,9 @@
 const jwt = require('jsonwebtoken');
 
+//check to see if access token is verified
 async function verifyAccessToken (req, res) {
     let decoded = jwt.decode(req.params.accessToken, {complete: true});
     let verified;
-
-    console.log(decoded.header);
 
     //prelim check if accessToken kid matches any keys
     for(let i = 0; i < this.binds.cognitoData.keys.length; i++) {

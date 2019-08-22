@@ -57,6 +57,16 @@
       "name": "auth/validateAccessToken",
       "path": "src/app/middlewares/auth/validateAccessToken.js",
       "createdAt": "2019-08-22T18:33:03.056Z"
+    },
+    {
+      "name": "auth/registerUser",
+      "path": "src/app/middlewares/auth/registerUser.js",
+      "createdAt": "2019-08-22T20:09:42.449Z"
+    },
+    {
+      "name": "auth/validateUserRegistration",
+      "path": "src/app/middlewares/auth/validateUserRegistration.js",
+      "createdAt": "2019-08-22T20:09:57.273Z"
     }
   ],
   "routes": [
@@ -66,14 +76,19 @@
       "createdAt": "2019-08-16T20:13:01.703Z"
     },
     {
-      "name": "users/loginUser",
-      "path": "src/app/routes/users/loginUser.js",
+      "name": "users/auth/loginUser",
+      "path": "src/app/routes/users/auth/loginUser.js",
       "createdAt": "2019-08-21T19:16:21.848Z"
     },
     {
-      "name": "users/verifyAccessToken",
-      "path": "src/app/routes/users/verifyAccessToken.js",
+      "name": "users/auth/verifyAccessToken",
+      "path": "src/app/routes/users/auth/verifyAccessToken.js",
       "createdAt": "2019-08-22T19:20:08.010Z"
+    },
+    {
+      "name": "users/auth/registerUser",
+      "path": "src/app/routes/users/auth/registerUser.js",
+      "createdAt": "2019-08-22T20:27:42.087Z"
     }
   ]
 }
