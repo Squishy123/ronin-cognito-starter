@@ -3,6 +3,7 @@ import verifyAccessToken from '../../../middlewares/auth/verifyAccessToken';
 
 const VerifyAccessToken = {
     method: "POST",
+    enabled: true,
     path: "/user/verify/accesstoken",
     handler: [validateAccessToken, verifyAccessToken, (req, res) => {
         console.log(req.scope);
